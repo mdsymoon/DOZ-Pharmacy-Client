@@ -14,16 +14,12 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { useNavigate } from "react-router";
 
 const Header = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -110,7 +106,10 @@ const Header = () => {
               },
             }}
           >
-            <button className="bg-pink-400 text-white font-medium px-2 py-1  rounded-md flex" onClick={() => navigate('/add-contact')}>
+            <button
+              className="bg-pink-400 text-white font-medium px-2 py-1  rounded-md flex"
+              onClick={() => navigate("/add-contact")}
+            >
               ADD CONTACT
             </button>
 

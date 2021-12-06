@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BiMessage } from "react-icons/bi";
 import { FiPhoneCall } from "react-icons/fi";
 import {
@@ -46,7 +46,7 @@ const ContactList = () => {
       </h1>
       <TableContainer component={Paper}>
         <Table
-          sx={{ minWidth: 650, backgroundColor: "#F5F6FB", boxShadow: "none"}}
+          sx={{ minWidth: 650, backgroundColor: "#F5F6FB", boxShadow: "none" }}
           aria-label="simple table"
         >
           <TableHead>
@@ -77,9 +77,9 @@ const ContactList = () => {
           </TableHead>
 
           <TableBody>
-            {allContact.map((contact, index) => (
+            {allContact.map((contact) => (
               <TableRow
-                key={contact.index}
+                key={contact._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell>
@@ -102,15 +102,15 @@ const ContactList = () => {
                   <Stack direction="row" spacing={1}>
                     {contact.tags.map((tag, index) => (
                       <Chip
-                        label={tag}
+                        label={tag.value}
                         size="small"
                         key={index}
                         color={
-                          tag === "CLIENT"
+                          tag.value === "CLIENT"
                             ? "primary"
-                            : tag === "WORKSHOP"
+                            : tag.value === "WORKSHOP"
                             ? "success"
-                            : tag === "INTERNAL WORKS"
+                            : tag.value === "INTERNAL WORKS"
                             ? "error"
                             : "default"
                         }
