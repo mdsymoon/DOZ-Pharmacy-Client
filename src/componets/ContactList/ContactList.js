@@ -12,6 +12,7 @@ import {
   TableHead,
   TableRow,
   Button,
+  Avatar,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -28,22 +29,26 @@ const ContactList = () => {
 
   const handleFav = (contact) => {
     const favContact = {
-      image : contact.image,
+      image: contact.image,
       name: contact.name,
+      position: contact.position,
       status: contact.status,
       location: contact.location,
       tags: contact.tags,
-    }
-    dispatch(addFavorite(favContact))
-  }
+    };
+    dispatch(addFavorite(favContact));
+  };
 
   return (
-    <div className="container mx-auto mt-5">
-      <h1 className="text-2xl font-semibold text-purple-700 my-3">
+    <div className="container mx-auto mt-5 mb-20 px-5">
+      <h1 className="text-2xl font-semibold text-indigo-700 mb-5 mt-16">
         Contacts List
       </h1>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table
+          sx={{ minWidth: 650, backgroundColor: "#F5F6FB", boxShadow: "none"}}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow>
               <TableCell>
@@ -67,23 +72,21 @@ const ContactList = () => {
               <TableCell align="left">
                 <p className="text-gray-400"></p>
               </TableCell>
-              <TableCell align="left">
-               
-              </TableCell>
+              <TableCell align="left"></TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {allContact.map((contact) => (
+            {allContact.map((contact, index) => (
               <TableRow
-                key={contact._id}
+                key={contact.index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell>
-                  <img
-                    src={contact.image}
+                  <Avatar
                     alt=""
-                    className="w-12 h-12 rounded-full"
+                    src={contact.image}
+                    sx={{ width: 50, height: 50 }}
                   />
                 </TableCell>
 
@@ -129,11 +132,13 @@ const ContactList = () => {
                   </Button>
                 </TableCell>
                 <TableCell align="left">
-                  <Button 
-                  size="small" 
-                  variant="contained"
-                  onClick={() => handleFav(contact)}
-                  >Favorite</Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={() => handleFav(contact)}
+                  >
+                    Favorite
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
