@@ -1,5 +1,5 @@
-import { TextField } from "@mui/material";
 import React from "react";
+import { Button, TextField, Box } from "@mui/material";
 import { useForm } from "react-hook-form";
 import Header from "./../../componets/Header/Header";
 
@@ -17,15 +17,36 @@ const AddContact = () => {
       <Header />
 
       {/* contact add form */}
-      <div>
+      <div className="flex justify-center mt-20 p-4">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField
+          
+            <TextField
+            fullWidth
             id="outlined-basic"
             label="Outlined"
             variant="outlined"
             {...register("name", { required: true })}
           />
-          <input type="submit" />
+          <TextField
+          fullWidth
+            id="outlined-basic"
+            label="Outlined"
+            variant="outlined"
+            {...register("name", { required: true })}
+          />
+          <TextField
+          fullWidth
+            id="outlined-basic"
+            label="Outlined"
+            variant="outlined"
+            {...register("name", { required: true })}
+          />
+         
+          
+          <br />
+          <Button type="submit" variant="contained">
+            Add Contact
+          </Button>
         </form>
       </div>
     </main>

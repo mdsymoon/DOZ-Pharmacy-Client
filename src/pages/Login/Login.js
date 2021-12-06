@@ -1,8 +1,11 @@
 import React from "react";
 import loginImg from "../../images/login.png";
 import { LockClosedIcon } from "@heroicons/react/solid";
+import { useDispatch } from "react-redux";
+import { isLogged } from "../../redux/loginSlice/loginSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -11,7 +14,7 @@ const Login = () => {
       email : data.get('email'),
       password : data.get('password')
     }
-    console.log(loginData)
+    dispatch(isLogged(loginData))
   };
 
   return (
