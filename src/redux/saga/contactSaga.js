@@ -1,14 +1,19 @@
-import { call, put, takeEvery} from "redux-saga/effects"
+import { call, put, takeEvery } from "redux-saga/effects";
 import { addContacts } from "../contactSlice/contactSlice";
+import axios from "axios";
 
-function* contactFetch(){
-    const res = yield call(() => fetch("http://localhost:4000/getUser")) ;
-    const contacts = yield res.json() ;
-    yield put(addContacts(contacts))
+function* contactFetch() {
+  let contacts = [];
+  yield call(() =>
+    axios
+      .get("http://localhost:4000/getUser")
+      .then((res) => (contacts = res.data))
+  );
+  yield put(addContacts(contacts));
 }
 
-function* contactSaga(){
-    yield takeEvery("contacts/getContactFetch",contactFetch);
+function* contactSaga() {
+  yield takeEvery("contacts/getContactFetch", contactFetch);
 }
 
 export default contactSaga;

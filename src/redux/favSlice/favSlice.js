@@ -7,12 +7,15 @@ const favSlice = createSlice({
   },
   reducers: {
     addFavorite: (state, { payload }) => {
-        state.favContacts.push (payload) 
+        state.favContacts =  payload 
     },
+    addNewFav: (state, { payload }) => {
+      state.favContacts = [...state.favContacts, payload]
+    }
   },
 });
 
 
-export const  {addFavorite} = favSlice.actions
+export const  {addFavorite, addNewFav} = favSlice.actions
 export const getFavContact = (state) => state.favContactStore.favContacts
 export default favSlice.reducer;

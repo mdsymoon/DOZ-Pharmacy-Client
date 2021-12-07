@@ -3,19 +3,30 @@ import loginImg from "../../images/login.png";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
 import { isLogged } from "../../redux/loginSlice/loginSlice";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import firebase from "firebase/compat/app";
+import firebaseConfig from './firebase.config';
+
+firebase.initializeApp(firebaseConfig);
 
 const Login = () => {
   const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const loginData = {
-      email : data.get('email'),
-      password : data.get('password')
-    }
-    dispatch(isLogged(loginData))
-  };
+  const googleSignIn = () => {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+    signInWithPopup(auth, provider).then((result) => {
+      const user = result.user;
+      const newUser = {
+        email: user.email,
+        username: user.displayName,
+        userImg: user.photoURL,
+      };
+      dispatch(isLogged(newUser));
+    });
+  }
+
+  
 
   return (
     <main>
@@ -38,9 +49,9 @@ const Login = () => {
                 </h2>
                 
               </div>
-              <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+              <form className="mt-8 space-y-6">
                 <input type="hidden" name="remember" defaultValue="true" />
-                <div className="rounded-md shadow-sm -space-y-px">
+                {/* <div className="rounded-md shadow-sm -space-y-px">
                   <div>
                     <label htmlFor="email-address" className="sr-only">
                       Email address
@@ -69,9 +80,9 @@ const Login = () => {
                       placeholder="Password"
                     />
                   </div>
-                </div>
+                </div> */}
 
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <input
                       id="remember-me"
@@ -95,12 +106,14 @@ const Login = () => {
                       Forgot your password?
                     </a>
                   </div>
-                </div>
+                </div> */}
 
+                  </form>
                 <div>
                   <button
                     type="submit"
                     className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={googleSignIn}
                   >
                     <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                       <LockClosedIcon
@@ -108,10 +121,9 @@ const Login = () => {
                         aria-hidden="true"
                       />
                     </span>
-                    Sign in
+                    Sign In With Google
                   </button>
                 </div>
-              </form>
             </div>
           </div>
         </div>

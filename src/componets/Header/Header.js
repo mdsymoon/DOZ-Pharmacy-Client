@@ -92,7 +92,7 @@ const Header = () => {
       <AppBar position="static" style={{ backgroundColor: "white" }}>
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            <h1 className="text-black"> DOZ Pharmacy - Contacts</h1>
+            <h1 className="text-black" onClick={() => navigate("/")}> DOZ Pharmacy - Contacts</h1>
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -107,10 +107,16 @@ const Header = () => {
             }}
           >
             <button
-              className="bg-pink-400 text-white font-medium px-2 py-1  rounded-md flex"
+              className="bg-pink-400 hover:bg-pink-500  text-white font-medium px-2 py-1  rounded-md flex"
               onClick={() => navigate("/add-contact")}
             >
               ADD CONTACT
+            </button>
+            <button
+              className="bg-gray-400 hover:bg-gray-500 text-white font-medium px-2 py-1  rounded-md flex"
+              onClick={() => navigate("/login")}
+            >
+              login
             </button>
 
             <button className="bg-gray-100 text-black  px-3 py-1 rounded-md flex">

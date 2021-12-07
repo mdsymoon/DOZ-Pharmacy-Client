@@ -7,9 +7,9 @@ const contactSlice = createSlice({
     isLoading: false,
   },
   reducers: {
-      getContactFetch: (state) => {
-        state.isLoading = true;
-      },
+    getContactFetch: (state) => {
+      state.isLoading = true;
+    },
     addContacts: (state, { payload }) => {
       state.contacts = payload;
     },
