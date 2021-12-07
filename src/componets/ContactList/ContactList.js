@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { BiMessage } from "react-icons/bi";
 import { FiPhoneCall } from "react-icons/fi";
 import {
@@ -14,13 +14,14 @@ import {
   Button,
   Avatar,
   TablePagination,
+  TextField,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllContacts,
   getContactFetch,
 } from "../../redux/contactSlice/contactSlice";
-import { addNewFav } from "../../redux/favSlice/favSlice";
+import { addNewFav, getFavContact } from "../../redux/favSlice/favSlice";
 import { getLoggedInUser } from "../../redux/loginSlice/loginSlice";
 import { editContact } from "../../redux/editContactSlice/editContactSlice";
 import { useNavigate } from "react-router";
@@ -28,14 +29,19 @@ import { useNavigate } from "react-router";
 const ContactList = () => {
   const dispatch = useDispatch();
   const { email } = useSelector(getLoggedInUser);
+  const favContacts = useSelector(getFavContact);
+  console.log(favContacts)
   const navigate = useNavigate();
   const allContact = useSelector(getAllContacts);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => dispatch(getContactFetch()), [dispatch]);
 
   const handleFav = (contact) => {
+    const isExit = favContacts.filter((con) => con.contact.name === contact.name);
+    if(isExit.length === 0) {
     const favContact = {
       image: contact.image,
       name: contact.name,
@@ -58,8 +64,11 @@ const ContactList = () => {
           console.log(err);
         });
     } else {
-      alert("please log in");
+      alert("please log in!");
     }
+  } else{
+    alert("This Contact Already Selected!")
+  }
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -85,6 +94,16 @@ const ContactList = () => {
       <h1 className="text-2xl font-semibold text-indigo-700 mb-5 mt-16">
         Contacts List
       </h1>
+      <div className="flex justify-center my-10">
+        <TextField
+          label="Search"
+          InputProps={{
+            type: "search",
+          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-80 md:w-96 my-10"
+        />
+      </div>
       <TableContainer component={Paper}>
         <Table
           sx={{ minWidth: 650, backgroundColor: "#F5F6FB", boxShadow: "none" }}
@@ -119,6 +138,15 @@ const ContactList = () => {
 
           <TableBody>
             {allContact
+              .filter((value) => {
+                if (searchTerm === "") {
+                  return value;
+                } else if (
+                  value.name.toLowerCase().includes(searchTerm.toLowerCase())
+                ) {
+                  return value;
+                }
+              })
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((contact) => (
                 <TableRow

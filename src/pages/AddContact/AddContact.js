@@ -10,7 +10,6 @@ import {
   FormControl,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import Header from "./../../componets/Header/Header";
 import { styled } from "@mui/material/styles";
 import { AiOutlineUpload } from "react-icons/ai";
 
@@ -60,8 +59,6 @@ const AddContact = () => {
 
   return (
     <main>
-      <Header />
-
       {/* contact add form */}
       <div className="flex justify-center mt-20 p-4">
         <form onSubmit={handleSubmit(onSubmit)}>

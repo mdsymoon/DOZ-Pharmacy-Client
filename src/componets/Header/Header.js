@@ -12,12 +12,15 @@ import { FiMoreVertical } from "react-icons/fi";
 import { BsFilter } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useNavigate } from "react-router";
+import { getLoggedInUser, isLogged } from "../../redux/loginSlice/loginSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const loggedIn = useSelector(getLoggedInUser);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -92,7 +95,10 @@ const Header = () => {
       <AppBar position="static" style={{ backgroundColor: "white" }}>
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            <h1 className="text-black" onClick={() => navigate("/")}> DOZ Pharmacy - Contacts</h1>
+            <h1 className="text-black" onClick={() => navigate("/")}>
+              {" "}
+              DOZ Pharmacy - Contacts
+            </h1>
           </Typography>
 
           <Box sx={{ flexGrow: 1 }} />
@@ -112,12 +118,21 @@ const Header = () => {
             >
               ADD CONTACT
             </button>
-            <button
-              className="bg-gray-400 hover:bg-gray-500 text-white font-medium px-2 py-1  rounded-md flex"
-              onClick={() => navigate("/login")}
-            >
-              login
-            </button>
+            {loggedIn.email ? (
+              <button
+                className="bg-gray-400 hover:bg-gray-500 text-white font-medium px-2 py-1  rounded-md flex"
+                onClick={() => dispatch(isLogged(""))}
+              >
+                logout
+              </button>
+            ) : (
+              <button
+                className="bg-gray-400 hover:bg-gray-500 text-white font-medium px-2 py-1  rounded-md flex"
+                onClick={() => navigate("/login")}
+              >
+                login
+              </button>
+            )}
 
             <button className="bg-gray-100 text-black  px-3 py-1 rounded-md flex">
               <BsFilter />

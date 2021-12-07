@@ -27,6 +27,7 @@ const FavoriteList = () => {
 
   return (
     <>
+   
       {favContact.length > 0 && (
         <div className="container mx-auto px-5">
           <h1 className="text-2xl font-semibold text-indigo-700 my-8">

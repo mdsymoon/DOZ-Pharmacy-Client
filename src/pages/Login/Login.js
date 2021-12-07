@@ -1,16 +1,19 @@
 import React from "react";
 import loginImg from "../../images/login.png";
 import { LockClosedIcon } from "@heroicons/react/solid";
-import { useDispatch } from "react-redux";
-import { isLogged } from "../../redux/loginSlice/loginSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getLoggedInUser, isLogged } from "../../redux/loginSlice/loginSlice";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import firebase from "firebase/compat/app";
-import firebaseConfig from './firebase.config';
+import firebaseConfig from "./firebase.config";
+import { Navigate } from "react-router";
 
 firebase.initializeApp(firebaseConfig);
 
 const Login = () => {
   const dispatch = useDispatch();
+  const loggedIn = useSelector(getLoggedInUser);
+  
 
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
@@ -24,15 +27,16 @@ const Login = () => {
       };
       dispatch(isLogged(newUser));
     });
-  }
-
-  
+  };
 
   return (
     <main>
+      {loggedIn.email && <Navigate to={-1} />}
       <div className="flex m-5">
         <div className="hidden p-5 w-96 min-h-screen lg:flex shadow-2xl rounded-lg  flex-col justify-center">
-          <h1 className="text-4xl text-gray-900 font-semibold mb-20">Hi, Welcome Back</h1>
+          <h1 className="text-4xl text-gray-900 font-semibold mb-20">
+            Hi, Welcome Back
+          </h1>
           <img src={loginImg} alt="login img" className="w-full self-center" />
         </div>
         <div className="flex-1">
@@ -47,7 +51,6 @@ const Login = () => {
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                   Sign in to your account
                 </h2>
-                
               </div>
               <form className="mt-8 space-y-6">
                 <input type="hidden" name="remember" defaultValue="true" />
@@ -107,23 +110,22 @@ const Login = () => {
                     </a>
                   </div>
                 </div> */}
-
-                  </form>
-                <div>
-                  <button
-                    type="submit"
-                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={googleSignIn}
-                  >
-                    <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                      <LockClosedIcon
-                        className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                        aria-hidden="true"
-                      />
-                    </span>
-                    Sign In With Google
-                  </button>
-                </div>
+              </form>
+              <div>
+                <button
+                  type="submit"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  onClick={googleSignIn}
+                >
+                  <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                    <LockClosedIcon
+                      className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                  Sign In With Google
+                </button>
+              </div>
             </div>
           </div>
         </div>
