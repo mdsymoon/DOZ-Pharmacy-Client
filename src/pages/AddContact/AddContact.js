@@ -12,10 +12,12 @@ import {
 import { useForm } from "react-hook-form";
 import { styled } from "@mui/material/styles";
 import { AiOutlineUpload } from "react-icons/ai";
+import { useNavigate } from "react-router";
 
 const AddContact = () => {
   const { register, handleSubmit, setValue, reset } = useForm();
   const [image, setImage] = useState(null);
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     if (image === null) return;
@@ -36,13 +38,16 @@ const AddContact = () => {
           tags: data.tags,
           image: imgData.secure_url,
         };
-        fetch("http://localhost:4000/add_contact", {
+        fetch("https://doz-pharmacy-api.herokuapp.com/add_contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(contactData),
         })
           .then((res) => res.json())
-          .then((contactData) => reset());
+          .then((contactData) => {
+            navigate('/')
+            
+          });
       });
   };
 

@@ -31,7 +31,6 @@ const ContactList = () => {
   const dispatch = useDispatch();
   const { email } = useSelector(getLoggedInUser);
   const favContacts = useSelector(getFavContact);
-  console.log(favContacts);
   const navigate = useNavigate();
   const allContact = useSelector(getAllContacts);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -54,7 +53,7 @@ const ContactList = () => {
         tags: contact.tags,
       };
       if (email) {
-        fetch("http://localhost:4000/addFavContacts", {
+        fetch("https://doz-pharmacy-api.herokuapp.com/addFavContacts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: email, contactData: favContact }),
@@ -86,7 +85,7 @@ const ContactList = () => {
   const handleEdit = (contact) => {
     if (email) {
       dispatch(editContact(contact));
-      navigate("/editContact");
+      navigate(`/editContact/${contact._id}`);
     } else {
       alert("please log in!");
     }
@@ -94,12 +93,12 @@ const ContactList = () => {
 
   const handleDelete = (contact) => {
     if (email) {
-      fetch("http://localhost:4000/deleteContact", {
+      fetch("https://doz-pharmacy-api.herokuapp.com/deleteContact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ contactId: contact._id }),
       });
-    } else{
+    } else {
       alert("please log in!");
     }
   };

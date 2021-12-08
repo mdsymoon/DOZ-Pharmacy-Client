@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/add-contact" element={<PrivateRoute><AddContact /></PrivateRoute>} />
-        <Route path="/editContact" element={<EditContact />} />
+        <Route path="/editContact/:id" element={<EditContact />} />
       </Routes>
     </BrowserRouter>
   );

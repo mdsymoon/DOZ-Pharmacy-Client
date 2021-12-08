@@ -10,43 +10,74 @@ import {
   FormControl,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import Header from "./../../componets/Header/Header";
 import { styled } from "@mui/material/styles";
 import { AiOutlineUpload } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getEditContact } from "../../redux/editContactSlice/editContactSlice";
+import { useNavigate, useParams } from "react-router";
+import { getContactFetch } from "../../redux/contactSlice/contactSlice";
+
 const EditContact = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
   const contact = useSelector(getEditContact);
   const { register, handleSubmit, setValue, reset } = useForm();
   const [image, setImage] = useState(null);
 
   const onSubmit = (data) => {
-    if (image === null) return;
-    const formData = new FormData();
-    formData.append("file", data.image);
-    formData.append("upload_preset", "contactsImages");
-    fetch("https://api.cloudinary.com/v1_1/dua2fn3m2/image/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((imgData) => {
-        const contactData = {
-          name: data.name,
-          position: data.position,
-          status: data.status,
-          location: data.location,
-          tags: data.tags,
-          image: imgData.secure_url,
-        };
-        fetch("http://localhost:4000/add_contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(contactData),
-        })
-          .then((res) => res.json())
-          .then((contactData) => reset());
-      });
+    console.log(data);
+    if (image === null) {
+      const contactData = {
+        id: id,
+        name: data.name,
+        position: data.position,
+        status: data.status,
+        location: data.location,
+        tags: data.tags,
+      };
+      fetch("https://doz-pharmacy-api.herokuapp.com/updateContact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contactData),
+      })
+        .then((res) => res.json())
+        .then((contactData) => {
+          dispatch(getContactFetch());
+          navigate("/");
+        });
+    } else {
+      const formData = new FormData();
+      formData.append("file", data.image);
+      formData.append("upload_preset", "contactsImages");
+      fetch("https://api.cloudinary.com/v1_1/dua2fn3m2/image/upload", {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((imgData) => {
+          const contactData = {
+            id: id,
+            name: data.name,
+            position: data.position,
+            status: data.status,
+            location: data.location,
+            tags: data.tags,
+            image: imgData.secure_url,
+          };
+
+          fetch("https://doz-pharmacy-api.herokuapp.com/updateContact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(contactData),
+          })
+            .then((res) => res.json())
+            .then((contactData) => {
+              dispatch(getContactFetch());
+              navigate("/");
+            });
+        });
+    }
   };
 
   const Input = styled("input")({
@@ -62,8 +93,6 @@ const EditContact = () => {
 
   return (
     <main>
-      <Header />
-
       {/* contact add form */}
       <div className="flex justify-center mt-20 p-4">
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -73,6 +102,9 @@ const EditContact = () => {
             label="Name"
             variant="outlined"
             margin="normal"
+            onChange={(e) =>
+              setValue("name", e.target.value, { shouldValidate: true })
+            }
             defaultValue={contact.name}
             {...register("name", { required: true })}
           />
@@ -82,6 +114,9 @@ const EditContact = () => {
             label="Position"
             variant="outlined"
             margin="normal"
+            onChange={(e) =>
+              setValue("position", e.target.value, { shouldValidate: true })
+            }
             defaultValue={contact.position}
             {...register("position", { required: true })}
           />
@@ -92,6 +127,9 @@ const EditContact = () => {
             label="Location"
             variant="outlined"
             margin="normal"
+            onChange={(e) =>
+              setValue("location", e.target.value, { shouldValidate: true })
+            }
             defaultValue={contact.location}
             {...register("location", { required: true })}
           />
@@ -103,6 +141,9 @@ const EditContact = () => {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="Status"
+                onChange={(e) =>
+                  setValue("status", e.target.value, { shouldValidate: true })
+                }
                 defaultValue={contact.status}
                 {...register("status", { required: true })}
               >

@@ -6,8 +6,8 @@ function* contactFetch() {
   let contacts = [];
   yield call(() =>
     axios
-      .get("http://localhost:4000/getUser")
-      .then((res) => (contacts = res.data))
+      .get("https://doz-pharmacy-api.herokuapp.com/getUser")
+      .then((res) => (contacts = res.data.reverse()))
   );
   yield put(addContacts(contacts));
 }

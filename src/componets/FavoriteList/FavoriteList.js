@@ -15,19 +15,26 @@ const FavoriteList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(!email) return
-    fetch("http://localhost:4000/getFavContacts", {
+    if (!email) return;
+    fetch("https://doz-pharmacy-api.herokuapp.com/getFavContacts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email }),
     })
       .then((res) => res.json())
       .then((data) => dispatch(addFavorite(data)));
-  }, [email, dispatch]);
+  });
+
+  const handleDelete = (contact) => {
+    fetch("https://doz-pharmacy-api.herokuapp.com/deleteFavorite", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contactId: contact._id }),
+    });
+  };
 
   return (
     <>
-   
       {favContact.length > 0 && (
         <div className="container mx-auto px-5">
           <h1 className="text-2xl font-semibold text-indigo-700 my-8">
@@ -57,7 +64,10 @@ const FavoriteList = () => {
                           {contact?.contact?.position}
                         </p>
                       </div>
-                      <IconButton className="bg-gray-100 p-2 rounded-full ">
+                      <IconButton
+                        className="bg-gray-100 p-2 rounded-full"
+                        onClick={() => handleDelete(contact)}
+                      >
                         <AiFillStar className="text-yellow-400" />
                       </IconButton>
                     </div>
