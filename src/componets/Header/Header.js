@@ -118,21 +118,14 @@ const Header = () => {
             >
               ADD CONTACT
             </button>
-            {loggedIn.email ? (
-              <button
-                className="bg-gray-400 hover:bg-gray-500 text-white font-medium px-2 py-1  rounded-md flex"
-                onClick={() => dispatch(isLogged(""))}
-              >
-                logout
-              </button>
-            ) : (
+            {!loggedIn.email  &&
               <button
                 className="bg-gray-400 hover:bg-gray-500 text-white font-medium px-2 py-1  rounded-md flex"
                 onClick={() => navigate("/login")}
               >
                 login
               </button>
-            )}
+            }
 
             <button className="bg-gray-100 text-black  px-3 py-1 rounded-md flex">
               <BsFilter />

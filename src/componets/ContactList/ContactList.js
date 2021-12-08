@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BiMessage } from "react-icons/bi";
 import { FiPhoneCall } from "react-icons/fi";
+import { AiTwotoneDelete } from "react-icons/ai";
 import {
   Chip,
   Paper,
@@ -30,45 +31,47 @@ const ContactList = () => {
   const dispatch = useDispatch();
   const { email } = useSelector(getLoggedInUser);
   const favContacts = useSelector(getFavContact);
-  console.log(favContacts)
+  console.log(favContacts);
   const navigate = useNavigate();
   const allContact = useSelector(getAllContacts);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => dispatch(getContactFetch()), [dispatch]);
+  useEffect(() => dispatch(getContactFetch()));
 
   const handleFav = (contact) => {
-    const isExit = favContacts.filter((con) => con.contact.name === contact.name);
-    if(isExit.length === 0) {
-    const favContact = {
-      image: contact.image,
-      name: contact.name,
-      position: contact.position,
-      status: contact.status,
-      location: contact.location,
-      tags: contact.tags,
-    };
-    if (email) {
-      fetch("http://localhost:4000/addFavContacts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, contactData: favContact }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          dispatch(addNewFav(data));
+    const isExit = favContacts.filter(
+      (con) => con.contact.name === contact.name
+    );
+    if (isExit.length === 0) {
+      const favContact = {
+        image: contact.image,
+        name: contact.name,
+        position: contact.position,
+        status: contact.status,
+        location: contact.location,
+        tags: contact.tags,
+      };
+      if (email) {
+        fetch("http://localhost:4000/addFavContacts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, contactData: favContact }),
         })
-        .catch((err) => {
-          console.log(err);
-        });
+          .then((res) => res.json())
+          .then((data) => {
+            dispatch(addNewFav(data));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        alert("please log in!");
+      }
     } else {
-      alert("please log in!");
+      alert("This Contact Already Selected!");
     }
-  } else{
-    alert("This Contact Already Selected!")
-  }
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -85,6 +88,18 @@ const ContactList = () => {
       dispatch(editContact(contact));
       navigate("/editContact");
     } else {
+      alert("please log in!");
+    }
+  };
+
+  const handleDelete = (contact) => {
+    if (email) {
+      fetch("http://localhost:4000/deleteContact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contactId: contact._id }),
+      });
+    } else{
       alert("please log in!");
     }
   };
@@ -128,9 +143,6 @@ const ContactList = () => {
               </TableCell>
               <TableCell align="left">
                 <p className="text-gray-400">ACTIONS</p>
-              </TableCell>
-              <TableCell align="left">
-                <p className="text-gray-400"></p>
               </TableCell>
               <TableCell align="left"></TableCell>
             </TableRow>
@@ -207,7 +219,7 @@ const ContactList = () => {
                   <TableCell align="left">
                     <Button
                       size="small"
-                      variant="contained"
+                      variant="outlined"
                       onClick={() => handleFav(contact)}
                     >
                       Favorite
@@ -216,10 +228,20 @@ const ContactList = () => {
                   <TableCell align="left">
                     <Button
                       size="small"
-                      variant="contained"
+                      variant="outlined"
                       onClick={() => handleEdit(contact)}
                     >
-                      Edit
+                      Update
+                    </Button>
+                  </TableCell>
+                  <TableCell align="left">
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<AiTwotoneDelete />}
+                      onClick={() => handleDelete(contact)}
+                    >
+                      Delete
                     </Button>
                   </TableCell>
                 </TableRow>
